@@ -35,10 +35,9 @@ class BasePage:
     def execute_script(self, script, *args):
         self.driver.execute_script(script, *args)
 
-    @allure.step('wait_for_element_to_be_clickable')
-    def wait_for_element_to_be_clickable(self, locator, timeout=3):
-        WebDriverWait(self.driver, timeout).until(
-            EC.element_to_be_clickable(locator))
+    @allure.step('wait_for_url_to_be')
+    def wait_for_url_to_be(self, expected_url: str, timeout=3):
+        WebDriverWait(self.driver, timeout).until(EC.url_to_be(expected_url))
 
     @allure.step('wait_for_number_of_windows_to_be')
     def wait_for_number_of_windows_to_be(self, num_windows: int, timeout=3):
@@ -49,6 +48,11 @@ class BasePage:
     def wait_for_element_to_be_visible(self, locator, timeout=3):
         WebDriverWait(self.driver, timeout).until(
             EC.visibility_of_element_located(locator))
+
+    @allure.step('wait_for_element_to_be_clickable')
+    def wait_for_element_to_be_clickable(self, locator, timeout=3):
+        WebDriverWait(self.driver, timeout).until(
+            EC.element_to_be_clickable(locator))
 
     @allure.step('switch_to_window')
     def switch_to_window(self, window_index: int):
@@ -63,8 +67,9 @@ class BasePage:
 
     @allure.step('close_modal')
     def close_modal(self):
-        self.find_element(base_page_locators.CLOSE_MODAL_BTN).click()
-
-    @allure.step('wait_for_url_to_be')
-    def wait_for_url_to_be(self, expected_url: str, timeout=3):
-        WebDriverWait(self.driver, timeout).until(EC.url_to_be(expected_url))
+        self.wait_for_element_to_be_clickable(
+            base_page_locators.CLOSE_MODAL_BTN, 5)
+        close_btn = self.find_element(base_page_locators.CLOSE_MODAL_BTN)
+        self.execute_script("arguments[0].click();", close_btn)
+        WebDriverWait(self.driver, 10).until(
+            EC.invisibility_of_element_located(base_page_locators.OPENED_MODAL))

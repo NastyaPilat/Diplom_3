@@ -23,3 +23,11 @@ class HomePage(BasePage):
         input_password.send_keys(CREDENTIALS["password"])
         self.find_element(login_page_locators.LOGIN_BTN).click()
         self.wait_for_url_to_be(HOME_PAGE_URL)
+
+    def make_order(self):
+        self.wait_for_element_to_be_clickable(
+            home_page_locators.INGREDIENT)
+        self.drag_and_drop(
+            home_page_locators.INGREDIENT, home_page_locators.CONSTRUCTOR_AREA)
+        self.click_element(home_page_locators.MAKE_ORDER_BTN)
+        self.close_modal()
