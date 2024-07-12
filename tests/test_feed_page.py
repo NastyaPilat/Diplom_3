@@ -1,16 +1,17 @@
-import time
+import allure
+import pytest
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 from constants import HOME_PAGE_URL, FEED_PAGE_URL
+from locators import base_page_locators, profile_page_locators, feed_page_locators
 from pages.home_page import HomePage
 from pages.feed_page import FeedPage
-from locators import base_page_locators, profile_page_locators, feed_page_locators
-from selenium.webdriver.support import expected_conditions as EC
-import pytest
-from selenium.webdriver.support.ui import WebDriverWait
 
 
 class TestFeedPage():
 
+    @allure.title('Eсли кликнуть на заказ, откроется всплывающее окно с деталями')
     def test_click_order(self, driver: WebDriver):
         feed_page = FeedPage(driver)
         feed_page.go_to(FEED_PAGE_URL)
@@ -19,6 +20,7 @@ class TestFeedPage():
         assert EC.visibility_of_element_located(
             base_page_locators.OPENED_MODAL)(driver)
 
+    @allure.title('Заказы пользователя из раздела «История заказов» отображаются на странице «Лента заказов»')
     def test_history_displayed_in_feed(self, driver: WebDriver):
         home_page = HomePage(driver)
         home_page.go_to(HOME_PAGE_URL)
@@ -37,6 +39,7 @@ class TestFeedPage():
             base_page_locators.ORDER_ID).text
         assert order_id_from_history == order_id_from_feed
 
+    @allure.title('При создании нового заказа счётчик {counter_locator} увеличивается')
     @pytest.mark.parametrize('counter_locator', [feed_page_locators.ALL_TIME_ORDERS_COUNTER, feed_page_locators.TODAY_ORDERS_COUNTER])
     def test_all_time_orders_counter(self, driver: WebDriver, counter_locator):
         home_page = HomePage(driver)
@@ -51,6 +54,7 @@ class TestFeedPage():
         value_after = home_page.find_element(counter_locator).text
         assert value_before != value_after
 
+    @allure.title('После оформления заказа его номер появляется в разделе "В работе"')
     def test_progress_list(self, driver: WebDriver):
         home_page = HomePage(driver)
         home_page.go_to(HOME_PAGE_URL)

@@ -2,8 +2,10 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-from locators import base_page_locators
 import allure
+from constants import HOME_PAGE_URL, LOGIN_PAGE_URL
+from locators import base_page_locators, login_page_locators
+from utils import register_user
 
 
 class BasePage:
@@ -73,3 +75,19 @@ class BasePage:
         self.execute_script("arguments[0].click();", close_btn)
         WebDriverWait(self.driver, 10).until(
             EC.invisibility_of_element_located(base_page_locators.OPENED_MODAL))
+
+    @allure.step('click_profile_btn')
+    def click_profile_btn(self):
+        self.click_element(base_page_locators.PROFILE_BTN)
+
+    @allure.step('login')
+    def login(self):
+        self.go_to(LOGIN_PAGE_URL)
+        self.wait_for_url_to_be(LOGIN_PAGE_URL)
+        [input_email, input_password] = self.find_elements(
+            base_page_locators.INPUT)
+        user = register_user()
+        input_email.send_keys(user["email"])
+        input_password.send_keys(user["password"])
+        self.find_element(login_page_locators.LOGIN_BTN).click()
+        self.wait_for_url_to_be(HOME_PAGE_URL)
