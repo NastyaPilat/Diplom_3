@@ -1,9 +1,10 @@
+from typing import Callable
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 import allure
-from constants import HOME_PAGE_URL, LOGIN_PAGE_URL
+from endpoints import HOME_PAGE_URL, LOGIN_PAGE_URL
 from locators import base_page_locators, login_page_locators
 from utils import register_user
 
@@ -56,6 +57,10 @@ class BasePage:
         WebDriverWait(self.driver, timeout).until(
             EC.element_to_be_clickable(locator))
 
+    @allure.step('wait_until')
+    def wait_until(self, callback: Callable[[WebDriver], bool], timeout=3):
+        WebDriverWait(self.driver, timeout).until(callback)
+
     @allure.step('switch_to_window')
     def switch_to_window(self, window_index: int):
         self.driver.switch_to.window(self.driver.window_handles[window_index])
@@ -91,3 +96,7 @@ class BasePage:
         input_password.send_keys(user["password"])
         self.find_element(login_page_locators.LOGIN_BTN).click()
         self.wait_for_url_to_be(HOME_PAGE_URL)
+
+    @allure.step('is_element_visible')
+    def is_element_visible(self, locator: tuple[str, str]):
+        return EC.visibility_of_element_located(locator)(self.driver)

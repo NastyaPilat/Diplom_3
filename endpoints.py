@@ -1,0 +1,7 @@
+HOME_PAGE_URL = "https://stellarburgers.nomoreparties.site/"
+FEED_PAGE_URL = f"{HOME_PAGE_URL}feed"
+LOGIN_PAGE_URL = f"{HOME_PAGE_URL}login"
+HISTORY_PAGE_URL = f"{HOME_PAGE_URL}account/order-history"
+FORGOT_PASSWORD_PAGE_URL = f"{HOME_PAGE_URL}forgot-password"
+RESET_PASSWORD_PAGE_URL = f"{HOME_PAGE_URL}reset-password"
+REGISTER_URL = f"{HOME_PAGE_URL}api/auth/register"

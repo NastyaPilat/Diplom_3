@@ -1,10 +1,13 @@
 from selenium.webdriver.common.by import By
 
 
-OPENED_MODAL = (By.CLASS_NAME, 'Modal_modal_opened__3ISw4')
-ORDER_ID_IN_MODAL = (By.XPATH, '//*[@class="Modal_modal_opened__3ISw4"]//h2')
-CLOSE_MODAL_BTN = (By.CLASS_NAME, 'Modal_modal__close__TnseK')
+CONTENT_MODAL = (By.XPATH, '//*[contains(@class, "Modal_modal__contentBox")]')
+ORDER_MODAL = (By.XPATH, '//*[contains(@class, "Modal_orderBox")]')
+OPENED_MODAL = (By.XPATH, '//*[contains(@class, "Modal_modal_opened")]')
+ORDER_ID_IN_MODAL = (
+    By.XPATH, '//*[contains(@class, "Modal_modal_opened")]//h2')
+CLOSE_MODAL_BTN = (By.XPATH, '//*[contains(@class, "Modal_modal__close")]')
 INPUT = (By.TAG_NAME, 'input')
 ORDER_ID = (
-    By.XPATH, '//div[contains(@class, "OrderHistory_textBox__3lgbs")]//p[contains(@class, "text_type_digits-default")]')
+    By.XPATH, '//div[contains(@class, "OrderHistory_textBox")]//p[contains(@class, "text_type_digits-default")]')
 PROFILE_BTN = (By.XPATH, "//a[@href = '/account']")

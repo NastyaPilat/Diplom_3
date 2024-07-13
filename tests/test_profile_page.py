@@ -1,6 +1,5 @@
 import allure
-from selenium.webdriver.remote.webdriver import WebDriver
-from constants import HISTORY_PAGE_URL, LOGIN_PAGE_URL
+from endpoints import HISTORY_PAGE_URL, LOGIN_PAGE_URL
 from pages.profile_page import ProfilePage
 from locators import profile_page_locators
 
@@ -8,8 +7,7 @@ from locators import profile_page_locators
 class TestProfilePage():
 
     @allure.title('Переход в раздел «История заказов»')
-    def test_go_to_history_page(self, driver: WebDriver):
-        profile_page = ProfilePage(driver)
+    def test_go_to_history_page(self, profile_page: ProfilePage):
         profile_page.login()
         profile_page.click_profile_btn()
         profile_page.wait_for_element_to_be_clickable(
@@ -18,8 +16,7 @@ class TestProfilePage():
         assert profile_page.get_current_url() == HISTORY_PAGE_URL
 
     @allure.title('Выход из аккаунта')
-    def test_signout(self, driver: WebDriver):
-        profile_page = ProfilePage(driver)
+    def test_signout(self, profile_page: ProfilePage):
         profile_page.login()
         profile_page.click_profile_btn()
         profile_page.wait_for_element_to_be_clickable(

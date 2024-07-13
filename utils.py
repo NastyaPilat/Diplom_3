@@ -2,6 +2,7 @@ import requests
 import random
 import string
 import allure
+from endpoints import REGISTER_URL
 
 
 def generate_random_user():
@@ -10,30 +11,22 @@ def generate_random_user():
     password = ''.join(random.choices(
         string.ascii_letters + string.digits, k=8))
     name = ''.join(random.choices(string.ascii_letters, k=8))
-
     return email, password, name
 
 
 @allure.step('Зарегистрировать пользователя')
 def register_user():
     email, password, name = generate_random_user()
-    url = 'https://stellarburgers.nomoreparties.site/api/auth/register'
     payload = {
         'email': email,
         'password': password,
         'name': name
     }
-
     try:
-        response = requests.post(url, json=payload)
+        response = requests.post(REGISTER_URL, json=payload)
         if response.status_code == 200:
-            return {
-                'email': email,
-                'password': password,
-                'name': name,
-            }
-        else:
-            return {'success': False}
+            return payload
+        return False
     except Exception as e:
         print(f"Error registering user: {str(e)}")
-        return {'success': False}
+        return False
